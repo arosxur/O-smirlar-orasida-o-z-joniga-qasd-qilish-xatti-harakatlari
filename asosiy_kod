@@ -1,5 +1,39 @@
 from matplotlib import pyplot as plt
 import pandas as pd
 import numpy as np
-data = pd.read_csv("suicides.csv")
+data = pd.read_excel("suicide.xlsx")
 data.head()
+
+# number of rows and columns
+data.shape 
+
+davlatlar = data.sort_values(by=['country'],ascending=True)
+davlatlar
+
+ratio = davlatlar
+jinsi = ratio['country']
+jinsi
+joniga_qasd_qilishi = ratio['attempted_suicide']
+joniga_qasd_qilishi
+plt.barh(jinsi, joniga_qasd_qilishi, color=['blue', 'orange', 'green'])
+plt.show()
+
+argentina = davlatlar.groupby(['country']).get_group('Argentina')
+argentina
+
+labels = ['Really get drunk', 'Overweight', 'Use marijuana', 'Had fights', 'Attempted suicide']
+male = [49.3, 35.9, 10.6, 44.2, 12.9]
+female = [50.7, 21.8, 6.5, 24.7, 18.9]
+x = np.arange(len(labels))  
+width = 0.30  
+fig, ax = plt.subplots()
+rects1 = ax.bar(x - width/2, male, width, label='Male')
+rects2 = ax.bar(x + width/2, female, width, label='Female')
+ax.set_ylabel('Percentage')
+ax.set_title('Percentage by cases and gender in Argentina in 2012.')
+ax.set_xticks(x, labels)
+ax.legend()
+ax.bar_label(rects1, padding=3)
+ax.bar_label(rects2, padding=3)
+fig.tight_layout()
+plt.show()
