@@ -1,0 +1,177 @@
+from matplotlib import pyplot as plt
+import pandas as pd
+import numpy as np
+data = pd.read_excel("suicide.xlsx")
+data.head(20)
+
+# number of rows and columns
+data.shape
+
+davlatlar = data.sort_values(by=['country'],ascending=True)
+davlatlar.tail(20)
+
+total_rate = davlatlar['attempted_suicide']
+total_rate.head(50)
+
+ratio = davlatlar
+jinsi = ratio['country']
+jinsi
+joniga_qasd_qilishi = ratio['attempted_suicide']
+joniga_qasd_qilishi
+plt.barh(jinsi, joniga_qasd_qilishi)
+plt.show()
+
+argentina = davlatlar.groupby(['country']).get_group('Argentina')
+argentina
+
+from matplotlib import pyplot as plt
+import pandas as pd
+import numpy as np
+labels = ['Really get drunk', 'Overweight', 'Use marijuana',  'Smoke cig currently', 'Got seriously injured', 'Had fights', 'Attempted suicide']
+male = [49.3, 35.9, 10.6, 17.0, 24.8, 44.2, 12.9]
+female = [50.7, 21.8, 6.5,20.5, 24.2, 24.7, 18.9]
+x = np.arange(len(labels))  
+width = 0.40  
+fig, ax = plt.subplots()
+rects1 = ax.bar(x - width/2, male, width, label='Male')
+rects2 = ax.bar(x + width/2, female, width, label='Female')
+ax.set_ylabel('Percentage')
+ax.set_title('Percentage by cases and gender in Argentina in 2012.')
+ax.set_xticks(x, labels)
+ax.legend()
+ax.bar_label(rects1, padding=3)
+ax.bar_label(rects2, padding=3)
+plt.xticks(rotation='vertical')
+fig.tight_layout()
+plt.show()
+
+davlatlar = data.sort_values(by=['country'],ascending=True)
+davlatlar
+
+samoa = davlatlar.groupby(['country']).get_group('Samoa')
+samoa
+
+samoa = davlatlar.groupby(['country']).get_group('Samoa')
+samoa
+
+indonesia = davlatlar.groupby(['country']).get_group('Indonesia')
+indonesia
+
+laos = davlatlar.groupby(['country']).get_group('Laos')
+laos
+
+malaysia = davlatlar.groupby(['country']).get_group('Malaysia')
+malaysia
+
+namibia = davlatlar.groupby(['country']).get_group('Namibia')
+namibia
+
+fig, ax = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect="equal"))
+
+recipe = ["Samoa - 53.7",
+          "Kiribati - 31.5",
+          "Indonesia - 3.6",
+          "Laos - 6.9 ",
+          "Malaysia - 7.4 ",
+          "Namibia - 23.8"]
+
+data = [225, 150, 35, 50, 60, 100]
+
+wedges, texts = ax.pie(data, wedgeprops=dict(width=0.5), startangle=-40)
+
+bbox_props = dict(boxstyle="square,pad=0.3", fc="w", ec="k", lw=0.72)
+kw = dict(arrowprops=dict(arrowstyle="-"),
+          bbox=bbox_props, zorder=0, va="center")
+
+for i, p in enumerate(wedges):
+    ang = (p.theta2 - p.theta1)/2. + p.theta1
+    y = np.sin(np.deg2rad(ang))
+    x = np.cos(np.deg2rad(ang))
+    horizontalalignment = {-1: "right", 1: "left"}[int(np.sign(x))]
+    connectionstyle = "angle,angleA=0,angleB={}".format(ang)
+    kw["arrowprops"].update({"connectionstyle": connectionstyle})
+    ax.annotate(recipe[i], xy=(x, y), xytext=(1.35*np.sign(x), 1.4*y),
+                horizontalalignment=horizontalalignment, **kw)
+
+ax.set_title("13 - 15 yoshli qizlar orasidagi o`z joniga qasd qilish")
+
+plt.show()
+
+from matplotlib import pyplot as plt
+import pandas as pd
+import numpy as np
+data = pd.read_excel("suicide.xlsx")
+data.head()
+
+p_name = data[['country', 'age_group', 'sex', 'really_get_drunk', 'use_marijuana', 'smoke_cig_currently', 'had_fights', 'got_seriously_injured', 'attempted_suicide' ]].nlargest(5,['attempted_suicide']).set_index('country')
+p_name
+
+category_names = ['Samoa - male', 'Samoa - female',
+                  'Kiribati', 'Vanuatu', 'Namibia']
+results = {
+    'Really get drunk': [47.7, 25.2, 10.4, 15.1, 26.7],
+    'Use marijuana': [43.2, 24.7, 1.6, 5.3, 6.7],
+    'Smoke cig currently': [42.2, 25.3, 19.5, 21.2, 10.1],
+    'Had fights': [73.3, 62.1, 28.5, 54.4, 44.0],
+    'Got seriously injured': [87.7, 78.6, 53.2, 71.8, 65.9],
+    'Attempted suicide': [67.2, 53.7, 31.5, 30.3, 29.9]
+}
+
+
+def survey(results, category_names):
+   
+    labels = list(results.keys())
+    data = np.array(list(results.values()))
+    data_cum = data.cumsum(axis=1)
+    category_colors = plt.colormaps['RdYlGn'](
+        np.linspace(0.15, 0.85, data.shape[1]))
+
+    fig, ax = plt.subplots(figsize=(9.2, 5))
+    ax.invert_yaxis()
+    ax.xaxis.set_visible(False)
+    ax.set_xlim(0, np.sum(data, axis=1).max())
+
+    for i, (colname, color) in enumerate(zip(category_names, category_colors)):
+        widths = data[:, i]
+        starts = data_cum[:, i] - widths
+        rects = ax.barh(labels, widths, left=starts, height=0.5,
+                        label=colname, color=color)
+
+        r, g, b, _ = color
+        text_color = 'white' if r * g * b < 0.5 else 'darkgrey'
+        ax.bar_label(rects, label_type='center', color=text_color)
+    ax.legend(ncol=len(category_names), bbox_to_anchor=(0, 1),
+              loc='lower left', fontsize='small')
+
+    return fig, ax
+
+
+survey(results, category_names)
+plt.show()
+
+from matplotlib import pyplot as plt
+import pandas as pd
+import numpy as np
+data = pd.read_excel("suicide.xlsx")
+data.head()
+year = data.sort_values(by=['year'],ascending=True)
+year
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+year = [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018]
+population_by_continent = {
+    '13 - 15': [22, 53.7, 18.9, 23.8, 5.9, 20.5, 20.1, 20.7, 19.9],
+    '16 - 17': [0, 0, 6.7, 24.4, 9.6, 17.8, 27.3, 21.8, 17.4],
+}
+
+fig, ax = plt.subplots()
+ax.stackplot(year, population_by_continent.values(),
+             labels=population_by_continent.keys(), alpha=0.8)
+ax.legend(loc='upper right')
+ax.set_title('Attepted suicides')
+ax.set_xlabel('Year')
+ax.set_ylabel('Rate')
+
+plt.show()
