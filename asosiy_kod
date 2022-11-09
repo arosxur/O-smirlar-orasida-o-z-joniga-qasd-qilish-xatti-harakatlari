@@ -2,27 +2,43 @@ from matplotlib import pyplot as plt
 import pandas as pd
 import numpy as np
 data = pd.read_excel("suicide.xlsx")
+
+#top 20 rows
 data.head(20)
 
 # number of rows and columns
 data.shape
 
-davlatlar = data.sort_values(by=['country'],ascending=True)
-davlatlar.tail(20)
+davlatlar = data.sort_values(by=['attempted_suicide'],ascending=False)
 
 total_rate = davlatlar['attempted_suicide']
-total_rate.head(50)
 
+fig = plt.figure(figsize=(8,7))
 ratio = davlatlar
 jinsi = ratio['country']
 jinsi
 joniga_qasd_qilishi = ratio['attempted_suicide']
 joniga_qasd_qilishi
-plt.barh(jinsi, joniga_qasd_qilishi)
+plt.barh(jinsi, joniga_qasd_qilishi,height = 0.8, align = 'center')
+plt.yticks(fontsize=10)
 plt.show()
 
 argentina = davlatlar.groupby(['country']).get_group('Argentina')
 argentina
+davlatlar = data.sort_values(by=['overweight'],ascending=False)
+
+total_rate = davlatlar['overweight']
+
+ratio = davlatlar
+jinsi = ratio['country']
+jinsi
+joniga_qasd_qilishi = ratio['overweight']
+joniga_qasd_qilishi
+plt.bar(jinsi, joniga_qasd_qilishi,align = 'center', width = 0.8)
+plt.xticks(rotation='vertical')
+plt.yticks(fontsize=10)
+plt.title("Percentage of overweight people with suicide attempts")
+plt.show()
 
 from matplotlib import pyplot as plt
 import pandas as pd
@@ -36,8 +52,10 @@ fig, ax = plt.subplots()
 rects1 = ax.bar(x - width/2, male, width, label='Male')
 rects2 = ax.bar(x + width/2, female, width, label='Female')
 ax.set_ylabel('Percentage')
-ax.set_title('Percentage by cases and gender in Argentina in 2012.')
-ax.set_xticks(x, labels)
+ax.set_title('Percentage of overweight people with suicide attempts in Argentina in 2012.')
+ax.set_xticks(x)
+ax.set_xticklabels(labels)
+
 ax.legend()
 ax.bar_label(rects1, padding=3)
 ax.bar_label(rects2, padding=3)
@@ -102,58 +120,6 @@ import pandas as pd
 import numpy as np
 data = pd.read_excel("suicide.xlsx")
 data.head()
-
-p_name = data[['country', 'age_group', 'sex', 'really_get_drunk', 'use_marijuana', 'smoke_cig_currently', 'had_fights', 'got_seriously_injured', 'attempted_suicide' ]].nlargest(5,['attempted_suicide']).set_index('country')
-p_name
-
-category_names = ['Samoa - male', 'Samoa - female',
-                  'Kiribati', 'Vanuatu', 'Namibia']
-results = {
-    'Really get drunk': [47.7, 25.2, 10.4, 15.1, 26.7],
-    'Use marijuana': [43.2, 24.7, 1.6, 5.3, 6.7],
-    'Smoke cig currently': [42.2, 25.3, 19.5, 21.2, 10.1],
-    'Had fights': [73.3, 62.1, 28.5, 54.4, 44.0],
-    'Got seriously injured': [87.7, 78.6, 53.2, 71.8, 65.9],
-    'Attempted suicide': [67.2, 53.7, 31.5, 30.3, 29.9]
-}
-
-
-def survey(results, category_names):
-   
-    labels = list(results.keys())
-    data = np.array(list(results.values()))
-    data_cum = data.cumsum(axis=1)
-    category_colors = plt.colormaps['RdYlGn'](
-        np.linspace(0.15, 0.85, data.shape[1]))
-
-    fig, ax = plt.subplots(figsize=(9.2, 5))
-    ax.invert_yaxis()
-    ax.xaxis.set_visible(False)
-    ax.set_xlim(0, np.sum(data, axis=1).max())
-
-    for i, (colname, color) in enumerate(zip(category_names, category_colors)):
-        widths = data[:, i]
-        starts = data_cum[:, i] - widths
-        rects = ax.barh(labels, widths, left=starts, height=0.5,
-                        label=colname, color=color)
-
-        r, g, b, _ = color
-        text_color = 'white' if r * g * b < 0.5 else 'darkgrey'
-        ax.bar_label(rects, label_type='center', color=text_color)
-    ax.legend(ncol=len(category_names), bbox_to_anchor=(0, 1),
-              loc='lower left', fontsize='small')
-
-    return fig, ax
-
-
-survey(results, category_names)
-plt.show()
-
-from matplotlib import pyplot as plt
-import pandas as pd
-import numpy as np
-data = pd.read_excel("suicide.xlsx")
-data.head()
 year = data.sort_values(by=['year'],ascending=True)
 year
 
@@ -170,7 +136,7 @@ fig, ax = plt.subplots()
 ax.stackplot(year, population_by_continent.values(),
              labels=population_by_continent.keys(), alpha=0.8)
 ax.legend(loc='upper right')
-ax.set_title('Attepted suicides')
+ax.set_title('Attempted suicides')
 ax.set_xlabel('Year')
 ax.set_ylabel('Rate')
 
